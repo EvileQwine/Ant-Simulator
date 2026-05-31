@@ -7,9 +7,18 @@
             "id": "faea3947-954f-4492-b84b-17900707f76e",
             "actions": [
                 {
-                    "name": "Zoom",
-                    "type": "PassThrough",
-                    "id": "2426e9c5-26ba-4bd9-b176-476ee3e1e8f6",
+                    "name": "LeftClick",
+                    "type": "Button",
+                    "id": "ae9c51a1-e4d2-47c9-bfce-c2366894a17d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightClick",
+                    "type": "Button",
+                    "id": "7bbd7616-c34b-4d3a-abaf-fcdf6097e65d",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -19,12 +28,23 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "1f6ff510-38c1-405a-8319-395e407d974e",
-                    "path": "<Mouse>/scroll",
+                    "id": "68ffa3f8-5765-47b7-a407-9845c43d64a3",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Zoom",
+                    "action": "LeftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cc75a468-036e-4ade-8ae6-bd5d4ae2945e",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
