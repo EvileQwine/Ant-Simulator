@@ -10,18 +10,20 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] int edgeScroll = 20;
     [SerializeField] float dragSpeed = 2f;
 
-    [SerializeField] int[] FOVconstraints = new int[2] { 5, 100 }; 
+    [SerializeField] int[] FOVconstraints = new int[2] { 5, 100 };
 
     [SerializeField] bool useEdgeScrolling = false;
     [SerializeField] bool useDragging = true;
 
     [SerializeField] CinemachineFollow followCam;
     Vector2 lastMousePos = Vector2.zero;
-    int targetFov = 60;
+    Vector3 target;
+    float targetFov;
     bool leftMouseDown = false;
+    bool rightMouseDown = false;
     void Awake()
     {
-        
+
     }
     void Update()
     {
@@ -35,7 +37,9 @@ public class CameraSystem : MonoBehaviour
             EdgeScrolling();
         }
         Rotation();
-        CameraZoom();
+        //CameraZoomFOV();
+        CameraZoomMovement();
+        RightRotation();
     }
     void EdgeScrolling()
     {
@@ -89,7 +93,7 @@ public class CameraSystem : MonoBehaviour
         if (Input.GetKey(KeyCode.E)) rotateInput -= 1f;
         transform.eulerAngles += new Vector3(0, rotateInput * Time.deltaTime * rotateSpeed, 0);
     }
-    void CameraZoom()
+    void CameraZoomFOV()
     {
         if (Input.mouseScrollDelta.y > 0)
         {
@@ -100,8 +104,15 @@ public class CameraSystem : MonoBehaviour
             targetFov += 5;
         }
         targetFov = Mathf.Clamp(targetFov, FOVconstraints[0], FOVconstraints[1]);
-        followCam.GetComponent<CinemachineCamera>().Lens.FieldOfView = 
+        followCam.GetComponent<CinemachineCamera>().Lens.FieldOfView =
             Mathf.Lerp(followCam.GetComponent<CinemachineCamera>().Lens.FieldOfView, targetFov, Time.deltaTime * zoomSpeed);
+    }
+    void CameraZoomMovement()
+    {
+        followCam.GetComponent<CinemachineFollow>().FollowOffset = new Vector3(0, 60, 0);
+    }
+    void RightRotation()
+    {
 
     }
 }

@@ -79,7 +79,7 @@ public class CameraMovement : MonoBehaviour
                     rb.AddForce(zoomSpeed * rb.transform.forward);
                     break;
                 case ZState.None:
-                    curZoom = ZState.In;
+                    curZoom = ZState.None;
                     StartCoroutine(Zooming(true));
                     rb.AddForce(zoomSpeed * rb.transform.forward);
                     break;
