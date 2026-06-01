@@ -5,25 +5,29 @@ using UnityEngine;
 public class CameraSystem : MonoBehaviour
 {
     [SerializeField] int moveSpeed = 20;
-    [SerializeField] int rotateSpeed = 300;
+    [SerializeField] int rotateSpeed = 100;
     [SerializeField] int zoomSpeed = 5;
     [SerializeField] int edgeScroll = 20;
     [SerializeField] float dragSpeed = 2f;
+    [SerializeField] float RightDragSpeed = 2f;
 
     [SerializeField] int[] FOVconstraints = new int[2] { 5, 100 };
+    [SerializeField] int[] FollowConstraints = new int[2] { 5, 60 };
+    [SerializeField] int[] YConstraints = new int[2] { 1, 60 };
 
     [SerializeField] bool useEdgeScrolling = false;
     [SerializeField] bool useDragging = true;
 
     [SerializeField] CinemachineFollow followCam;
     Vector2 lastMousePos = Vector2.zero;
-    Vector3 target;
+    Vector3 targetOffset;
     float targetFov;
     bool leftMouseDown = false;
     bool rightMouseDown = false;
     void Awake()
     {
-
+        targetOffset = followCam.GetComponent<CinemachineFollow>().FollowOffset;
+        targetFov = followCam.GetComponent<CinemachineCamera>().Lens.FieldOfView;
     }
     void Update()
     {
@@ -37,8 +41,8 @@ public class CameraSystem : MonoBehaviour
             EdgeScrolling();
         }
         Rotation();
-        //CameraZoomFOV();
-        CameraZoomMovement();
+        CameraZoomFOV();
+        //CameraZoomMovement();
         RightRotation();
     }
     void EdgeScrolling()
@@ -57,12 +61,12 @@ public class CameraSystem : MonoBehaviour
     void Dragging()
     {
         Vector3 input = Vector3.zero;
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(2))
         {
             leftMouseDown = true;
             lastMousePos = Input.mousePosition;
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(2))
         {
             leftMouseDown = false;
         }
@@ -109,10 +113,42 @@ public class CameraSystem : MonoBehaviour
     }
     void CameraZoomMovement()
     {
-        followCam.GetComponent<CinemachineFollow>().FollowOffset = new Vector3(0, 60, 0);
+        Vector3 direction = targetOffset.normalized;
+        if (Input.mouseScrollDelta.y > 0) targetOffset -= direction;
+        if (Input.mouseScrollDelta.y < 0) targetOffset += direction;
+
+        if (targetOffset.magnitude < FollowConstraints[0]) targetOffset = direction * FollowConstraints[0];
+        if (targetOffset.magnitude > FollowConstraints[1]) targetOffset = direction * FollowConstraints[1];
+
+        followCam.GetComponent<CinemachineFollow>().FollowOffset =
+            Vector3.Lerp(followCam.GetComponent<CinemachineFollow>().FollowOffset, targetOffset, Time.deltaTime * zoomSpeed);
     }
     void RightRotation()
     {
-
+        Vector3 input = Vector3.zero;
+        float rotateInput = 0f;
+        if (Input.GetMouseButtonDown(1))
+        {
+            rightMouseDown = true;
+            lastMousePos = Input.mousePosition;
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            rightMouseDown = false;
+        }
+        if (rightMouseDown)
+        {
+            Vector2 mouseMovement = (Vector2)Input.mousePosition - lastMousePos;
+            rotateInput = mouseMovement.x;
+            targetOffset.y += mouseMovement.y / -RightDragSpeed;
+            lastMousePos = Input.mousePosition;
+            if (targetOffset.y != 0)
+            {
+                targetOffset.y = Mathf.Clamp(targetOffset.y, YConstraints[0], YConstraints[1]);
+                followCam.GetComponent<CinemachineFollow>().FollowOffset =
+                    Vector3.Lerp(followCam.GetComponent<CinemachineFollow>().FollowOffset, targetOffset, Time.deltaTime * zoomSpeed);
+            }
+            transform.eulerAngles += new Vector3(0, rotateInput * Time.deltaTime * rotateSpeed, 0);
+        }
     }
 }

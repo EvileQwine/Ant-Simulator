@@ -684,7 +684,10 @@ MonoBehaviour:
   zoomSpeed: 5
   edgeScroll: 20
   dragSpeed: 3
+  RightDragSpeed: 2
   FOVconstraints: 0500000064000000
+  FollowConstraints: 050000003c000000
+  YConstraints: 010000003c000000
   useEdgeScrolling: 0
   useDragging: 1
   followCam: {fileID: 479372628}
