@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "name": "BlueprintSelect",
+    "maps": [
+        {
+            "name": "BuildTypes",
+            "id": "cc63d34f-effc-406a-88b8-78645b09a0d0",
+            "actions": [
+                {
+                    "name": "One",
+                    "type": "Button",
+                    "id": "08074baf-12b8-4ebc-ad17-ce3b069d1f5f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Zero",
+                    "type": "Button",
+                    "id": "101994ab-71a7-4845-9c82-d51d00da31e0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Two",
+                    "type": "Button",
+                    "id": "ae49eb14-a40c-4994-b0e6-24469146126b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "20e5baef-66ca-41b3-a8d7-70351c6179b2",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "One",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f04223ce-853b-4f52-baa5-bc6ee470005d",
+                    "path": "<Keyboard>/0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zero",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5eb7e964-2917-4c9d-835c-0256b651a3c2",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Two",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -22,12 +23,13 @@ public class CameraSystem : MonoBehaviour
     Vector2 lastMousePos = Vector2.zero;
     Vector3 targetOffset;
     float targetFov;
-    bool leftMouseDown = false;
+    bool middleMouseDown = false;
     bool rightMouseDown = false;
     void Awake()
     {
         targetOffset = followCam.GetComponent<CinemachineFollow>().FollowOffset;
         targetFov = followCam.GetComponent<CinemachineCamera>().Lens.FieldOfView;
+        
     }
     void Update()
     {
@@ -63,14 +65,14 @@ public class CameraSystem : MonoBehaviour
         Vector3 input = Vector3.zero;
         if (Input.GetMouseButtonDown(2))
         {
-            leftMouseDown = true;
+            middleMouseDown = true;
             lastMousePos = Input.mousePosition;
         }
         if (Input.GetMouseButtonUp(2))
         {
-            leftMouseDown = false;
+            middleMouseDown = false;
         }
-        if (leftMouseDown)
+        if (middleMouseDown)
         {
             Vector2 mouseMovement = (Vector2)Input.mousePosition - lastMousePos;
             input.x = mouseMovement.x / -dragSpeed;
