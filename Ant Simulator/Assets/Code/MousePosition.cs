@@ -6,9 +6,8 @@ public class MousePosition : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
     [SerializeField] float breakAwayDistance = 2f;
-    [SerializeField] float jstbsTime = 0.1f;
     SphereCollider sCol;
-    GameObject nearestPath;
+    public GameObject nearestPath;
     public bool followingMouse = true;
     public bool nearPath = false;
     private void Awake()
@@ -25,8 +24,7 @@ public class MousePosition : MonoBehaviour
         {
             if (Vector3.Distance(nearestPath.transform.position, TrackMouse()) > breakAwayDistance)
             {
-                followingMouse = true;
-                nearPath = false;
+                StartCoroutine(CheckNewMousePos());
             }
             else transform.position = nearestPath.transform.position;
         }
@@ -44,6 +42,16 @@ public class MousePosition : MonoBehaviour
             nearestPath = other.gameObject;
             nearPath = true;
             followingMouse = false;
+        }
+    }
+    IEnumerator CheckNewMousePos()
+    {
+        transform.position = TrackMouse();
+        yield return new WaitForFixedUpdate();
+        if (Vector3.Distance(nearestPath.transform.position, TrackMouse()) > breakAwayDistance)
+        {
+            followingMouse = true;
+            nearPath = false;
         }
     }
 }
