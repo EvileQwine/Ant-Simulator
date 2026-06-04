@@ -11,9 +11,12 @@ public class ManageBlueprints : MonoBehaviour
 {
     [SerializeField] GameObject mouseFollower;
     [SerializeField] GameObject path;
-    LineRenderer lineRen;
+    [SerializeField] GameObject line;
+    [SerializeField] float hardPlaceCooldown = 0.5f;
+
     public GameObject currentFollower;
     public List<Vector3> paths = new List<Vector3>();
+    public List<Vector3[]> storedPaths = new List<Vector3[]>();
 
     public bool activeFollower = false;
     public bool leftMouseDown = false;
@@ -28,11 +31,7 @@ public class ManageBlueprints : MonoBehaviour
     Builds build;
     void Awake()
     {
-        lineRen = GetComponent<LineRenderer>();
-        lineRen.startColor = Color.lightGoldenRodYellow;
-        lineRen.endColor = Color.lightGoldenRodYellow;
-        lineRen.startWidth = 1f;
-        lineRen.endWidth = 1f;
+
     }
     void Update()
     {
@@ -41,7 +40,17 @@ public class ManageBlueprints : MonoBehaviour
         if (activeFollower)
         {
             if (Input.GetMouseButtonDown(0)) leftMouseDown = true;
-            if (Input.GetMouseButtonUp(0)) leftMouseDown = false; //paths.Clear();
+            if (Input.GetMouseButtonUp(0)) 
+            {
+                leftMouseDown = false;
+                if (paths.Count > 0)
+                {
+                    storedPaths.Add(paths.ToArray());
+                    paths.Clear();
+                    GameObject newLine = Instantiate(line);
+                    newLine.GetComponent<PathLineScript>().DrawLine(storedPaths.Last());
+                }
+            }
         }
         if (leftMouseDown && build == Builds.Path)
         {
@@ -61,11 +70,6 @@ public class ManageBlueprints : MonoBehaviour
         GameObject newPath = Instantiate(path, mouseFollower.GetComponent<MousePosition>().TrackMouse(), new Quaternion(0, 0, 0, 0));
         currentFollower.GetComponent<MousePosition>().nearestPath = newPath;
         currentFollower.GetComponent<MousePosition>().nearPath = true;
-        if (paths.Count > 0)
-        {
-            lineRen.SetPosition(0, paths.Last());
-            lineRen.SetPosition(1, newPath.transform.position);
-        }
         paths.Add(newPath.transform.position);
     }
     void OnZero()
@@ -96,7 +100,7 @@ public class ManageBlueprints : MonoBehaviour
     IEnumerator HardPlace()
     {
         canHardPlace = false;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(hardPlaceCooldown);
         canHardPlace = true;
     }
 }

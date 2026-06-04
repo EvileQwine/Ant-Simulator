@@ -5,7 +5,7 @@ using UnityEngine;
 public class MousePosition : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
-    [SerializeField] float breakAwayDistance = 2f;
+    [SerializeField] public float breakAwayDistance = 2f;
     SphereCollider sCol;
     public GameObject nearestPath;
     public bool followingMouse = true;
