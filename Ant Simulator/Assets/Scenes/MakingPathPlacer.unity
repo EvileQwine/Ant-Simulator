@@ -178,11 +178,11 @@ MonoBehaviour:
   mouseFollower: {fileID: 8234054488280417377, guid: 5ff79737eaef6144d87003041ecc270e, type: 3}
   path: {fileID: 146053131369065025, guid: d9cbfae339819e24682b87452e2684b0, type: 3}
   line: {fileID: 2684706792985955398, guid: 4042809fc81ac864fbd3a38f9db47862, type: 3}
-  hardPlaceCooldown: 0.5
   currentFollower: {fileID: 0}
   paths: []
   activeFollower: 0
   leftMouseDown: 0
+  backspaceDown: 0
   ctrlDown: 0
 --- !u!4 &190486591
 Transform:
@@ -1252,10 +1252,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraSystem
   moveSpeed: 20
   rotateSpeed: 100
-  zoomSpeed: 5
+  zoomSpeed: 10
   edgeScroll: 20
   dragSpeed: 3
   RightDragSpeed: 2
+  downRotateSpeed: 5
   FOVconstraints: 0500000082000000
   FollowConstraints: 050000003c000000
   YConstraints: 010000003c000000

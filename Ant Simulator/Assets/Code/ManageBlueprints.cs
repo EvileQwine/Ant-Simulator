@@ -12,16 +12,17 @@ public class ManageBlueprints : MonoBehaviour
     [SerializeField] GameObject mouseFollower;
     [SerializeField] GameObject path;
     [SerializeField] GameObject line;
-    [SerializeField] float hardPlaceCooldown = 0.5f;
 
-    public GameObject currentFollower;
-    public List<Vector3> paths = new List<Vector3>();
-    public List<Vector3[]> storedPaths = new List<Vector3[]>();
+    MousePosition curScript;
+
+    GameObject currentFollower;
+    public List<GameObject> paths = new List<GameObject>();
+    public List<Tuple<Vector3[], GameObject>> storedPaths = new List<Tuple<Vector3[], GameObject>>();
 
     public bool activeFollower = false;
     public bool leftMouseDown = false;
+    public bool backspaceDown = false;
     public bool ctrlDown = false;
-    bool canHardPlace = true;
     public enum Builds
     {
         None,
@@ -35,8 +36,6 @@ public class ManageBlueprints : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl)) ctrlDown = true;
-        if (Input.GetKeyUp(KeyCode.LeftControl)) ctrlDown = false;
         if (activeFollower)
         {
             if (Input.GetMouseButtonDown(0)) leftMouseDown = true;
@@ -45,32 +44,79 @@ public class ManageBlueprints : MonoBehaviour
                 leftMouseDown = false;
                 if (paths.Count > 0)
                 {
-                    storedPaths.Add(paths.ToArray());
-                    paths.Clear();
+                    Vector3[] v = new Vector3[paths.Count];
+                    for (int i = 0; i < paths.Count; i++)
+                    {
+                        v[i] = paths[i].transform.position;
+                    }
                     GameObject newLine = Instantiate(line);
-                    newLine.GetComponent<PathLineScript>().DrawLine(storedPaths.Last());
+                    newLine.GetComponent<PathLineScript>().DrawLine(v);
+                    storedPaths.Add(Tuple.Create(v, newLine));
+                    paths.Clear();
                 }
             }
+            if (Input.GetKeyDown(KeyCode.Backspace)) backspaceDown = true;
+            if (Input.GetKeyUp(KeyCode.Backspace)) backspaceDown = false;
+        }
+        else
+        {
+            backspaceDown = false;
+            leftMouseDown = false;
         }
         if (leftMouseDown && build == Builds.Path)
         {
-            if (!currentFollower.GetComponent<MousePosition>().nearPath)
+            PlacePath();
+        }
+        if (backspaceDown && build == Builds.Path)
+        {
+            if (curScript.nearPath)
             {
-                PlacePath();
-            }
-            else if (ctrlDown && canHardPlace)
-            {
-                PlacePath();
-                StartCoroutine(HardPlace());
+                Tuple<Vector3[], GameObject> t = storedPaths[curScript.nearestPath.GetComponent<PathMemory>().pathGroup];
+                int i = curScript.nearestPath.GetComponent<PathMemory>().groupIndex;
+                if (i == 1)
+                {
+                    Debug.Log("First");
+                }
+                else if (i == t.Item1.Length)
+                {
+                    Debug.Log("Last");
+                }
+                else
+                {
+                    Vector3[] start = t.Item1.Take(i).ToArray();
+                    Vector3[] end = t.Item1.Skip(i).ToArray();
+                    
+                }
+                
+                Destroy(curScript.nearestPath);
+                curScript.nearPath = false;
+                curScript.followingMouse = true;
             }
         }
     }
     void PlacePath()
     {
-        GameObject newPath = Instantiate(path, mouseFollower.GetComponent<MousePosition>().TrackMouse(), new Quaternion(0, 0, 0, 0));
-        currentFollower.GetComponent<MousePosition>().nearestPath = newPath;
-        currentFollower.GetComponent<MousePosition>().nearPath = true;
-        paths.Add(newPath.transform.position);
+        if (!curScript.nearPath)
+        {
+            if (curScript.TrackMouse() == Vector3.zero) return;
+            GameObject newPath = Instantiate(path, curScript.TrackMouse(), new Quaternion(0, 0, 0, 0));
+            curScript.nearestPath = newPath;
+            curScript.nearPath = true;
+            paths.Add(newPath);
+            newPath.GetComponent<PathMemory>().pathGroup = storedPaths.Count();
+            newPath.GetComponent<PathMemory>().groupIndex = paths.Count();
+        }
+        else
+        {
+            for (int i = 0; i < paths.Count; i++)
+            {
+                if (curScript.nearestPath == paths[i])
+                {
+                    return;
+                }
+            }
+            paths.Add(curScript.nearestPath);
+        }
     }
     void OnZero()
     { CurBuildState(Builds.None); }
@@ -93,14 +139,9 @@ public class ManageBlueprints : MonoBehaviour
             if (!activeFollower)
             {
                 currentFollower = Instantiate(mouseFollower);
+                curScript = currentFollower.GetComponent<MousePosition>();
             }
             activeFollower = true;
         }
-    }
-    IEnumerator HardPlace()
-    {
-        canHardPlace = false;
-        yield return new WaitForSeconds(hardPlaceCooldown);
-        canHardPlace = true;
     }
 }

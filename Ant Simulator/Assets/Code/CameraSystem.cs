@@ -7,10 +7,11 @@ public class CameraSystem : MonoBehaviour
 {
     [SerializeField] int moveSpeed = 20;
     [SerializeField] int rotateSpeed = 100;
-    [SerializeField] int zoomSpeed = 5;
+    [SerializeField] int zoomSpeed = 10;
     [SerializeField] int edgeScroll = 20;
     [SerializeField] float dragSpeed = 2f;
     [SerializeField] float RightDragSpeed = 2f;
+    [SerializeField] float downRotateSpeed = 5f;
 
     [SerializeField] int[] FOVconstraints = new int[2] { 5, 100 };
     [SerializeField] int[] FollowConstraints = new int[2] { 5, 60 };
@@ -43,8 +44,8 @@ public class CameraSystem : MonoBehaviour
             EdgeScrolling();
         }
         Rotation();
-        CameraZoomFOV();
-        //CameraZoomMovement();
+        //CameraZoomFOV();
+        CameraZoomMovement();
         RightRotation();
     }
     void EdgeScrolling()
@@ -148,7 +149,7 @@ public class CameraSystem : MonoBehaviour
             {
                 targetOffset.y = Mathf.Clamp(targetOffset.y, YConstraints[0], YConstraints[1]);
                 followCam.GetComponent<CinemachineFollow>().FollowOffset =
-                    Vector3.Lerp(followCam.GetComponent<CinemachineFollow>().FollowOffset, targetOffset, Time.deltaTime * zoomSpeed);
+                    Vector3.Lerp(followCam.GetComponent<CinemachineFollow>().FollowOffset, targetOffset, Time.deltaTime * downRotateSpeed);
             }
             transform.eulerAngles += new Vector3(0, rotateInput * Time.deltaTime * rotateSpeed, 0);
         }

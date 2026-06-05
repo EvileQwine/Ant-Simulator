@@ -6,6 +6,7 @@ public class MousePosition : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
     [SerializeField] public float breakAwayDistance = 2f;
+    [SerializeField] public bool pathSnapping = true;
     SphereCollider sCol;
     public GameObject nearestPath;
     public bool followingMouse = true;
@@ -37,7 +38,7 @@ public class MousePosition : MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Path"))
+        if (other.gameObject.CompareTag("Path") && pathSnapping)
         {
             nearestPath = other.gameObject;
             nearPath = true;
