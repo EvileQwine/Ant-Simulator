@@ -12,16 +12,18 @@ public class ManageBlueprints : MonoBehaviour
     [SerializeField] GameObject mouseFollower;
     [SerializeField] GameObject path;
     [SerializeField] GameObject line;
+    [SerializeField] float deleteCoolDown = 0.5f;
 
     MousePosition curScript;
     GameObject currentFollower;
     
     public List<GameObject> paths = new List<GameObject>();
 
+
     public bool activeFollower = false;
     public bool leftMouseDown = false;
     public bool backspaceDown = false;
-    public bool ctrlDown = false;
+    public bool canDelete = true;
     public enum Builds
     {
         None,
@@ -68,8 +70,9 @@ public class ManageBlueprints : MonoBehaviour
         }
         if (backspaceDown && build == Builds.Path)
         {
-            if (curScript.nearPath)
+            if (curScript.nearPath && canDelete)
             {
+                StartCoroutine(DeleteCooldown());
                 curScript.nearestPath.GetComponent<PathMemory>().DeleteSelf();
                 Destroy(curScript.nearestPath);
                 curScript.nearPath = false;
@@ -125,5 +128,11 @@ public class ManageBlueprints : MonoBehaviour
             }
             activeFollower = true;
         }
+    }
+    IEnumerator DeleteCooldown()
+    {
+        canDelete = false;
+        yield return new WaitForSeconds(deleteCoolDown * Time.deltaTime);
+        canDelete = true;
     }
 }
