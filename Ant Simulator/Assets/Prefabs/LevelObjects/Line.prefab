@@ -155,3 +155,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f63b682cb90f65429e0e8c3ae091baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathLineScript
+  Line: {fileID: 2684706792985955398}
+  pathWidth: 0.5
+  points: []

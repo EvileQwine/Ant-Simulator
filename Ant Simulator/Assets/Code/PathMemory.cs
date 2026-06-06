@@ -2,20 +2,8 @@ using UnityEngine;
 
 public class PathMemory : MonoBehaviour
 {
-    [SerializeField] int _pathGroup;
     [SerializeField] int _groupIndex;
-
-    public int pathGroup
-    {
-        get
-        {
-            return _pathGroup;
-        }
-        set
-        {
-            _pathGroup = value;
-        }
-    }
+    GameObject _line;
     public int groupIndex
     {
         get
@@ -26,5 +14,20 @@ public class PathMemory : MonoBehaviour
         {
             _groupIndex = value;
         }
+    }
+    public GameObject Line
+    {
+        get
+        {
+            return _line;
+        }
+        set
+        {
+            _line = value;
+        }
+    }
+    public void DeleteSelf()
+    {
+        _line.GetComponent<PathLineScript>().DeletedObject(_groupIndex);
     }
 }

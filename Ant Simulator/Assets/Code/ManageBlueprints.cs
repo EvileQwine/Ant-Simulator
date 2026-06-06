@@ -14,10 +14,9 @@ public class ManageBlueprints : MonoBehaviour
     [SerializeField] GameObject line;
 
     MousePosition curScript;
-
     GameObject currentFollower;
+    
     public List<GameObject> paths = new List<GameObject>();
-    public List<Tuple<Vector3[], GameObject>> storedPaths = new List<Tuple<Vector3[], GameObject>>();
 
     public bool activeFollower = false;
     public bool leftMouseDown = false;
@@ -44,14 +43,14 @@ public class ManageBlueprints : MonoBehaviour
                 leftMouseDown = false;
                 if (paths.Count > 0)
                 {
-                    Vector3[] v = new Vector3[paths.Count];
+                    GameObject newLine = Instantiate(line);
+                    GameObject[] v = new GameObject[paths.Count];
                     for (int i = 0; i < paths.Count; i++)
                     {
-                        v[i] = paths[i].transform.position;
+                        paths[i].GetComponent<PathMemory>().Line = newLine;
+                        v[i] = paths[i];
                     }
-                    GameObject newLine = Instantiate(line);
                     newLine.GetComponent<PathLineScript>().DrawLine(v);
-                    storedPaths.Add(Tuple.Create(v, newLine));
                     paths.Clear();
                 }
             }
@@ -71,23 +70,7 @@ public class ManageBlueprints : MonoBehaviour
         {
             if (curScript.nearPath)
             {
-                Tuple<Vector3[], GameObject> t = storedPaths[curScript.nearestPath.GetComponent<PathMemory>().pathGroup];
-                int i = curScript.nearestPath.GetComponent<PathMemory>().groupIndex;
-                if (i == 1)
-                {
-                    Debug.Log("First");
-                }
-                else if (i == t.Item1.Length)
-                {
-                    Debug.Log("Last");
-                }
-                else
-                {
-                    Vector3[] start = t.Item1.Take(i).ToArray();
-                    Vector3[] end = t.Item1.Skip(i).ToArray();
-                    
-                }
-                
+                curScript.nearestPath.GetComponent<PathMemory>().DeleteSelf();
                 Destroy(curScript.nearestPath);
                 curScript.nearPath = false;
                 curScript.followingMouse = true;
@@ -103,7 +86,6 @@ public class ManageBlueprints : MonoBehaviour
             curScript.nearestPath = newPath;
             curScript.nearPath = true;
             paths.Add(newPath);
-            newPath.GetComponent<PathMemory>().pathGroup = storedPaths.Count();
             newPath.GetComponent<PathMemory>().groupIndex = paths.Count();
         }
         else
