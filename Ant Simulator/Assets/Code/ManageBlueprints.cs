@@ -13,6 +13,7 @@ public class ManageBlueprints : MonoBehaviour
     [SerializeField] GameObject path;
     [SerializeField] GameObject line;
     [SerializeField] float deleteCoolDown = 0.5f;
+    [SerializeField] float placeCoolDown = 0.1f;
 
     MousePosition curScript;
     GameObject currentFollower;
@@ -24,6 +25,7 @@ public class ManageBlueprints : MonoBehaviour
     public bool leftMouseDown = false;
     public bool backspaceDown = false;
     public bool canDelete = true;
+    public bool canPlace = true;
     public enum Builds
     {
         None,
@@ -49,7 +51,7 @@ public class ManageBlueprints : MonoBehaviour
                     GameObject[] v = new GameObject[paths.Count];
                     for (int i = 0; i < paths.Count; i++)
                     {
-                        paths[i].GetComponent<PathMemory>().Line = newLine;
+                        paths[i].GetComponent<PathMemory>().AddLine(newLine);
                         v[i] = paths[i];
                     }
                     newLine.GetComponent<PathLineScript>().DrawLine(v);
@@ -134,5 +136,11 @@ public class ManageBlueprints : MonoBehaviour
         canDelete = false;
         yield return new WaitForSeconds(deleteCoolDown * Time.deltaTime);
         canDelete = true;
+    }
+    IEnumerator PlaceCooldown()
+    {
+        canPlace = false;
+        yield return new WaitForSeconds(placeCoolDown * Time.deltaTime);
+        canPlace = true;
     }
 }

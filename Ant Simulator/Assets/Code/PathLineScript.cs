@@ -39,7 +39,8 @@ public class PathLineScript : MonoBehaviour
             for (int i = 0; i < v.Length; i++)
             {
                 v[i] = points[i + 1];
-                v[i].GetComponent<PathMemory>().Line = gameObject;
+                v[i].GetComponent<PathMemory>().ForgetLines(gameObject);
+                v[i].GetComponent<PathMemory>().AddLine(gameObject);
                 v[i].GetComponent<PathMemory>().groupIndex = i + 1;
             }
             DrawLine(v);
@@ -50,7 +51,8 @@ public class PathLineScript : MonoBehaviour
             for (int i = 0; i < v.Length; i++)
             {
                 v[i] = points[i];
-                v[i].GetComponent<PathMemory>().Line = gameObject;
+                v[i].GetComponent<PathMemory>().ForgetLines(gameObject);
+                v[i].GetComponent<PathMemory>().AddLine(gameObject);
                 v[i].GetComponent<PathMemory>().groupIndex = i + 1;
             }
             DrawLine(v);
@@ -63,13 +65,15 @@ public class PathLineScript : MonoBehaviour
             for (int i = 0; i < first.Length; i++)
             {
                 first[i] = points[i];
-                first[i].GetComponent<PathMemory>().Line = gameObject;
+                first[i].GetComponent<PathMemory>().ForgetLines(gameObject);
+                first[i].GetComponent<PathMemory>().AddLine(gameObject);
                 first[i].GetComponent<PathMemory>().groupIndex = i + 1;
             }
             for (int i = 0; i < second.Length; i++)
             {
                 second[i] = points[i + index];
-                second[i].GetComponent<PathMemory>().Line = newLine;
+                second[i].GetComponent<PathMemory>().ForgetLines(gameObject);
+                second[i].GetComponent<PathMemory>().AddLine(newLine);
                 second[i].GetComponent<PathMemory>().groupIndex = i + 1;
             }
             DrawLine(first);

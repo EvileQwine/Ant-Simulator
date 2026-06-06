@@ -24,9 +24,14 @@ public class LeafFlutter : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.mass = gravityScale;
         col = GetComponentInChildren<Collider>();
+        rb.constraints = RigidbodyConstraints.FreezeAll;
     }
     void Update()
     {
+        if (rb.useGravity)
+        {
+            rb.constraints = RigidbodyConstraints.None;
+        }
         if (!touchingGround && rb.useGravity)
         {
             realRotation = transform.localRotation.eulerAngles.z;

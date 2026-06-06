@@ -7,14 +7,13 @@ public class CameraSystem : MonoBehaviour
 {
     [SerializeField] int moveSpeed = 20;
     [SerializeField] int rotateSpeed = 100;
-    [SerializeField] int zoomSpeed = 10;
+    [SerializeField] int zoomSpeed = 1000;
     [SerializeField] int edgeScroll = 20;
     [SerializeField] float dragSpeed = 2f;
     [SerializeField] float RightDragSpeed = 2f;
     [SerializeField] float downRotateSpeed = 5f;
 
     [SerializeField] int[] FOVconstraints = new int[2] { 5, 100 };
-    [SerializeField] int[] FollowConstraints = new int[2] { 5, 60 };
     [SerializeField] int[] YConstraints = new int[2] { 1, 60 };
 
     [SerializeField] bool useEdgeScrolling = false;
@@ -90,7 +89,9 @@ public class CameraSystem : MonoBehaviour
         if (Input.GetKey(KeyCode.S)) input.z -= 1f;
         if (Input.GetKey(KeyCode.A)) input.x -= 1f;
         if (Input.GetKey(KeyCode.D)) input.x += 1f;
-        Vector3 movement = transform.forward * input.z + transform.right * input.x;
+        if (Input.GetKey(KeyCode.LeftShift)) input.y += 1f;
+        if (Input.GetKey(KeyCode.LeftControl)) input.y -= 1f;
+        Vector3 movement = transform.forward * input.z + transform.right * input.x + transform.up * input.y;
         transform.position += moveSpeed * Time.deltaTime * movement;
     }
     void Rotation()
@@ -116,15 +117,11 @@ public class CameraSystem : MonoBehaviour
     }
     void CameraZoomMovement()
     {
-        Vector3 direction = targetOffset.normalized;
-        if (Input.mouseScrollDelta.y > 0) targetOffset -= direction;
-        if (Input.mouseScrollDelta.y < 0) targetOffset += direction;
-
-        if (targetOffset.magnitude < FollowConstraints[0]) targetOffset = direction * FollowConstraints[0];
-        if (targetOffset.magnitude > FollowConstraints[1]) targetOffset = direction * FollowConstraints[1];
-
-        followCam.GetComponent<CinemachineFollow>().FollowOffset =
-            Vector3.Lerp(followCam.GetComponent<CinemachineFollow>().FollowOffset, targetOffset, Time.deltaTime * zoomSpeed);
+        int input = 0;
+        if (Input.mouseScrollDelta.y > 0) input -= 1;
+        if (Input.mouseScrollDelta.y < 0) input += 1;
+        Vector3 movement = (followCam.transform.position - transform.position).normalized;
+        transform.position += zoomSpeed * Time.deltaTime * movement * input;
     }
     void RightRotation()
     {

@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PathMemory : MonoBehaviour
 {
     [SerializeField] int _groupIndex;
-    GameObject _line;
+    [SerializeField] List<GameObject> _lines = new List<GameObject>();
     public int groupIndex
     {
         get
@@ -15,19 +17,25 @@ public class PathMemory : MonoBehaviour
             _groupIndex = value;
         }
     }
-    public GameObject Line
+    public void AddLine(GameObject line)
     {
-        get
+        _lines.Add(line);
+    }
+    public void ForgetLines(GameObject line)
+    {
+        for (int i = 0; i < _lines.Count; i++)
         {
-            return _line;
-        }
-        set
-        {
-            _line = value;
+            if (line == _lines[i])
+            {
+                _lines.RemoveAt(i);
+            }
         }
     }
     public void DeleteSelf()
     {
-        _line.GetComponent<PathLineScript>().DeletedObject(_groupIndex);
+        foreach (GameObject line in _lines)
+        {
+            line.GetComponent<PathLineScript>().DeletedObject(_groupIndex);
+        }   
     }
 }

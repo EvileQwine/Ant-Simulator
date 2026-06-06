@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 852600931469357244}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.45621687, y: 0.00069356634, z: -0.00035557695, w: 0.8898683}
-  m_LocalPosition: {x: 0, y: 30, z: -45}
+  m_LocalRotation: {x: 0.092532724, y: 0.0042542177, z: -0.00039535426, w: 0.9957005}
+  m_LocalPosition: {x: -0.20943947, y: 15, z: -59.999268}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -95,7 +95,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 0, y: 0, z: 0}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 20, z: -15}
+  FollowOffset: {x: 0, y: 5, z: -30}
 --- !u!114 &6968976560614378214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,8 +153,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144585900506110202}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.45621693, y: 0.0006935664, z: -0.00035557704, w: 0.88986826}
-  m_LocalPosition: {x: 0, y: 30, z: -45}
+  m_LocalRotation: {x: 0.09253274, y: 0.004254218, z: -0.00039535423, w: 0.9957005}
+  m_LocalPosition: {x: -0.20943947, y: 15, z: -59.999268}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -320,13 +320,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2867224130415882351}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.003490679, z: 0, w: 0.9999939}
   m_LocalPosition: {x: 0, y: 10, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6959112546037446708}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0.4, z: 0}
 --- !u!114 &5894595897797641058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,14 +341,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraSystem
   moveSpeed: 20
   rotateSpeed: 100
-  zoomSpeed: 10
+  zoomSpeed: 1000
   edgeScroll: 20
   dragSpeed: 3
   RightDragSpeed: 2
   downRotateSpeed: 5
   FOVconstraints: 0500000082000000
-  FollowConstraints: 0500000064000000
-  YConstraints: 010000003c000000
+  YConstraints: ecffffffc8000000
   useEdgeScrolling: 0
   useDragging: 1
   followCam: {fileID: 8591991666468122944}
